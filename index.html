@@ -1,12 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homework lesson 4</title>
+    <meta name="viewport" content="width=device-width>, initial-scale=1.0" />
+    <title>SheCodes homework</title>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+    <style>
+      body {
+        padding: 5px;
+        margin: 10px 50px 10px 10px;
+        font-family: Arial, Helvetica, sans-serif;
+        border: 4px solid #b5d5c5;
+        border-radius: 4px;
+      }
+
+      input {
+        margin-left: 50px;
+        margin-top: 10px;
+      }
+      h1 {
+        font-size: 50px;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        color: #a31acb;
+        padding: 20px 200px 20px 160px;
+        position: relative;
+      }
+      .city {
+        font-size: 20px;
+      }
+      .card {
+        width: 80px;
+        box-sizing: content-box;
+        margin: 5px 20px 10px 30px;
+      }
+      .currentlyWeather {
+        font-size: 35px;
+        margin-top: 35px;
+        padding-left: 0px;
+      }
+      .dates {
+        font-size: 20px;
+
+        padding: 0px 5px 30px 5px;
+
+        margin-left: 70px;
+      }
+      #special-button {
+        font-size: 15px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        background-color: #b5d5c5;
+        padding: 10px 20px 10px 20px;
+        border: none;
+        border-radius: 6px;
+        box-shadow: 10px 5px 5px #eeeeee;
+        transition: all 150ms ease-in-out;
+      }
+
+      #special-button:hover {
+        cursor: pointer;
+        background-color: white;
+        color: #b5d5c5;
+
+        border: 3px solid #b5d5c5;
+      }
+      #current-temperature {
+        font-size: 15px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        background-color: #5669d6;
+        padding: 10px 20px 10px 20px;
+        border: none;
+        border-radius: 6px;
+        box-shadow: 10px 5px 5px #eeeeee;
+        transition: all 150ms ease-in-out;
+      }
+      #current-temperature:hover {
+        cursor: pointer;
+        background-color: white;
+        color: #b5d5c5;
+
+        border: 3px solid #b5d5c5;
+      }
+      .card-text {
+        text-align: center;
+      }
+
+      .card-title {
+        text-align: center;
+      }
+      .temperature {
+        text-align: center;
+      }
+    </style>
   </head>
+
   <body>
-    <h1>Hello world!!</h1>
+    <form id="search-city">
+      <input
+        id="city-submitted"
+        type="search"
+        placeholder="Choose city"
+        class="city"
+      />
+      <input
+        id="special-button"
+        type="submit"
+        placeholder="Search"
+        class="button"
+      />
+      <input
+        id="current-temperature"
+        type="submit"
+        placeholder="Current"
+        class="button"
+      />
+    </form>
+    <h1>Turin</h1>
+    <h2>date</h2>
+
+    <div class="container dates">
+      <div class="row dates">
+        <div id="celsius" class="col-5 currentlyWeather">☀ 15°C</div>
+        <div class="col-5 dates">
+          Sunday 12:00, sunny
+          <div>Humidity:62%</div>
+          <div>Wind: 8 km/h</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="containerDays">
+      <div class="row">
+        <div class="card col-4">
+          <div class="card-body">
+            <h5 class="card-title">Mon</h5>
+            <p class="card-text">☀</p>
+            <h6 class="temperature">12° 8°</h6>
+          </div>
+        </div>
+        <div class="card col-4">
+          <div class="card-body">
+            <h5 class="card-title">Tue</h5>
+            <p class="card-text">☀</p>
+            <h6 class="temperature">14° 4°</h6>
+          </div>
+        </div>
+        <div class="card col-4">
+          <div class="card-body">
+            <h5 class="card-title">Wed</h5>
+            <p class="card-text">☀</p>
+            <h6 class="temperature">14° 4°</h6>
+          </div>
+        </div>
+        <div class="card col-4">
+          <div class="card-body">
+            <h5 class="card-title">Thu</h5>
+            <p class="card-text">☀</p>
+            <h6 class="temperature">10° 3°</h6>
+          </div>
+        </div>
+        <div class="card col-4">
+          <div class="card-body">
+            <h5 class="card-title">Fri</h5>
+            <p class="card-text">☀</p>
+            <h6 class="temperature">11° 4°</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      let days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+
+      let date = document.querySelector("h2");
+      console.log(date);
+      let now = new Date();
+      let hour = now.getHours();
+
+      if (hour < 10) {
+        hour = `0${hour}`;
+      }
+      console.log(hour);
+      let minutes = now.getMinutes();
+
+      if (minutes < 10) {
+        minutes = `0${minutes}`;
+      }
+      console.log(minutes);
+      let currentDay = days[now.getDay()];
+      console.log(currentDay);
+      date.innerHTML = `${currentDay} ${hour}:${minutes}`;
+
+      let city = document.querySelector("h1");
+      function seeCity(response) {
+        console.log(response.data);
+      }
+      function displayWeatherCondition(response) {
+        city.innerHTML = response.data.name;
+        document.querySelector("#celsius").innerHTML = Math.round(
+          response.data.main.temp
+        );
+      }
+
+      function searchCity(city) {
+        let apiKey = "ce144f0cf51fa43f03431f0488a36728";
+        let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        axios.get(apiUrl).then(displayWeatherCondition);
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        let città = document.querySelector("#city-submitted").value;
+        searchCity(città);
+      }
+
+      let searchForm = document.querySelector("#search-city");
+      searchForm.addEventListener("submit", handleSubmit);
+
+      function showPosition(position) {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+        let apiKey = "ce144f0cf51fa43f03431f0488a36728";
+        let geoApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+        axios.get(geoApiUrl).then(displayWeatherCondition);
+      }
+
+      function getCurrentLocation(event) {
+        event.preventDefault();
+        navigator.geolocation.getCurrentPosition(showPosition);
+      }
+
+      let localTemperature = document.querySelector("#current-temperature");
+      localTemperature.addEventListener("click", getCurrentLocation);
+    </script>
   </body>
 </html>
