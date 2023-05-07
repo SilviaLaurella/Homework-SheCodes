@@ -52,7 +52,7 @@
 
         margin-left: 70px;
       }
-      .button {
+      #special-button {
         font-size: 15px;
         font-family: Arial, Helvetica, sans-serif;
         color: white;
@@ -64,7 +64,25 @@
         transition: all 150ms ease-in-out;
       }
 
-      .button:hover {
+      #special-button:hover {
+        cursor: pointer;
+        background-color: white;
+        color: #b5d5c5;
+
+        border: 3px solid #b5d5c5;
+      }
+      #current-temperature {
+        font-size: 15px;
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        background-color: #2141f5;
+        padding: 10px 20px 10px 20px;
+        border: none;
+        border-radius: 6px;
+        box-shadow: 10px 5px 5px #eeeeee;
+        transition: all 150ms ease-in-out;
+      }
+      #current-temperature:hover {
         cursor: pointer;
         background-color: white;
         color: #b5d5c5;
@@ -96,6 +114,12 @@
         id="special-button"
         type="submit"
         placeholder="Search"
+        class="button"
+      />
+      <input
+        id="current-temperature"
+        type="submit"
+        placeholder="Current"
         class="button"
       />
     </form>
@@ -162,7 +186,7 @@
         "Friday",
         "Saturday",
       ];
-      let selectCity = document.querySelector("h1");
+
       let date = document.querySelector("h2");
       console.log(date);
       let now = new Date();
@@ -182,19 +206,47 @@
       console.log(currentDay);
       date.innerHTML = `${currentDay} ${hour}:${minutes}`;
 
+      let city = document.querySelector("h1");
       function seeCity(response) {
         console.log(response.data);
       }
-      let submit = document.querySelector("#search-city");
-      let città = document.querySelector("#city-submitted").value;
-      function showTemperature(response) {
-        event.preventDefault();
-        let apiKey = "ce144f0cf51fa43f03431f0488a36728";
-
-        let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${città}&appid=${apiKey}&units=metric`;
-        axios.get(apiUrl).then(seeCity);
+      function displayWeatherCondition(response) {
+        city.innerHTML = response.data.name;
+        document.querySelector("#celsius").innerHTML = Math.round(
+          response.data.main.temp
+        );
       }
-      submit.addEventListener("submit", seeCity);
+
+      function searchCity(city) {
+        let apiKey = "ce144f0cf51fa43f03431f0488a36728";
+        let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+        axios.get(apiUrl).then(displayWeatherCondition);
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        let città = document.querySelector("#city-submitted").value;
+        searchCity(città);
+      }
+
+      let searchForm = document.querySelector("#search-city");
+      searchForm.addEventListener("submit", handleSubmit);
+
+      function showPosition(position) {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+        let apiKey = "ce144f0cf51fa43f03431f0488a36728";
+        let geoApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+        axios.get(geoApiUrl).then(displayWeatherCondition);
+      }
+
+      function getCurrentLocation(event) {
+        event.preventDefault();
+        navigator.geolocation.getCurrentPosition(showPosition);
+      }
+
+      let localTemperature = document.querySelector("#current-temperature");
+      localTemperature.addEventListener("click", getCurrentLocation);
     </script>
   </body>
 </html>
